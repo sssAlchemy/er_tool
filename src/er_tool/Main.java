@@ -24,10 +24,11 @@ public class Main {
 	private static final String csv_file = "c:\\20140227\\dictionary_1.csv";
 	private static final String xmlRootName = "ERD";
 	private static final String[] ele = {"ENTITY","ATTR","INDEX","RELATION"};
-	
 	private static Main test = new Main();
+	private static Dictionary dictionary = new Dictionary(csv_file);
 
 	public static void main(String[] args) {
+		dictionary.ｒeadDictionary();
 		if(test.fncXMLFileCheckCreate()==false) return;
 		test.fncXMLChgPnameAttr();
 	}
