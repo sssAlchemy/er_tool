@@ -53,7 +53,7 @@ public class Dictionary {
 		quickSort(keyArray, 0, word_count-1);
 		for (int j=0; j<keyArray.length; j++) {
 			index.put(j, keyArray[keyArray.length-(j+1)]);
-			System.out.println("keyArray["+j+"] = "+keyArray[keyArray.length-(j+1)]);
+//			System.out.println("keyArray["+j+"] = "+keyArray[keyArray.length-(j+1)]);
 		}
 	}
 	
@@ -87,14 +87,26 @@ public class Dictionary {
 		array[idx2] = tmp;
 	}
 	
-	private String jaToEn(String ja) {
+	//日本語を英語に変換するメソッド
+	String jaToEn(String ja) {
 		String en = null;
+		String regex = null;
+		for(int i=0; i<keyArray.length; i++){
+			regex = index.get(i);
+			Pattern p = Pattern.compile(/*"HashMapのキー"*/regex);
+			Matcher m = p.matcher(ja);
+			ja = m.replaceAll(word.get(/*"HashMapのキー"*/regex)+"_");
+//			en = m.replaceAll(word.get(/*"HashMapのキー"*/regex)+"_");
+		}
 		
-		Pattern p = Pattern.compile("HashMapのキー");
-
-		Matcher m = p.matcher(ja);
-		en = m.replaceAll(word.get("HashMapのキー"));
+		Pattern q = Pattern.compile("__");
+		Matcher n = q.matcher(ja);
+		ja = n.replaceAll("_");
 		
+		if(ja.endsWith("_")){
+			ja = ja.substring(0, ja.length()-1);
+		}
+		en = ja;
 		return en;
 	}
 	

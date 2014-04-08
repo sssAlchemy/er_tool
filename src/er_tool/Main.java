@@ -20,15 +20,16 @@ import org.xml.sax.SAXException;
 
 public class Main {
 	private static final String in_file = "c:\\20140227\\input.edm";
-	private static final String out_file = "c:\\20140227\\demo_b.edm";
+	private static final String out_file = "c:\\20140227\\demo_c.edm";
 	private static final String csv_file = "c:\\20140227\\dictionary_1.csv";
 	private static final String xmlRootName = "ERD";
 	private static final String[] ele = {"ENTITY","ATTR","INDEX","RELATION"};
+	private static final String attrName = "P-NAME";
 	private static Main test = new Main();
 	private static Dictionary dictionary = new Dictionary(csv_file);
 
 	public static void main(String[] args) {
-		dictionary.ｒeadDictionary();
+//		dictionary.ｒeadDictionary();
 		if(test.fncXMLFileCheckCreate()==false) return;
 		test.fncXMLChgPnameAttr();
 	}
@@ -103,32 +104,36 @@ public class Main {
 		    		
 		    		String tag = element_a.getNodeName();
 		    		if(tag.equals(ele[h])){
-			    		String name = element_a.getAttribute("P-NAME");
-			    		try {
-			    	        File csv = new File(csv_file); 
-			    	        BufferedReader br = new BufferedReader(new FileReader(csv));
-			    	        // 最終行まで読み込む
-			    	        String line = "";
-			    	        while ((line = br.readLine()) != null) {
-			    	            // 1行をデータの要素に分割
-			    	        	String[] st = line.split(",", 0);
-			    	        	String str0 = st[0].replaceAll("\"", "");
-			    	            	if(name.equals(str0)) {
-			    	            		wrkChk = true;
-			    	            			agValue = st[1].replaceAll("\"", "").toUpperCase();
-			    	            			element_a.setAttribute("P-NAME", agValue);
-			    	            			System.out.println("P-NAME:"+agValue);
-			    	            		break;
-			    	            	}
-			    	        }
-			    	        br.close();
-			    	    } catch (FileNotFoundException e) {
-			    	        // Fileオブジェクト生成時の例外捕捉
-			    	        e.printStackTrace();
-			    	    } catch (IOException e) {
-			    	        // BufferedReaderオブジェクトのクローズ時の例外捕捉
-			    	        e.printStackTrace();
-			    	    }
+			    		String name = element_a.getAttribute(attrName);
+			    		agValue = dictionary.jaToEn(name);
+			    		element_a.setAttribute(attrName, agValue);
+			    		System.out.println(attrName+":"+agValue);
+			    		wrkChk = true;
+//			    		try {
+//			    	        File csv = new File(csv_file); 
+//			    	        BufferedReader br = new BufferedReader(new FileReader(csv));
+//			    	        // 最終行まで読み込む
+//			    	        String line = "";
+//			    	        while ((line = br.readLine()) != null) {
+//			    	            // 1行をデータの要素に分割
+//			    	        	String[] st = line.split(",", 0);
+//			    	        	String str0 = st[0].replaceAll("\"", "");
+//			    	            	if(name.equals(str0)) {
+//			    	            		wrkChk = true;
+//			    	            			agValue = st[1].replaceAll("\"", "").toUpperCase();
+//			    	            			element_a.setAttribute(attrName, agValue);
+//			    	            			System.out.println(attrName+":"+agValue);
+//			    	            		break;
+//			    	            	}
+//			    	        }
+//			    	        br.close();
+//			    	    } catch (FileNotFoundException e) {
+//			    	        // Fileオブジェクト生成時の例外捕捉
+//			    	        e.printStackTrace();
+//			    	    } catch (IOException e) {
+//			    	        // BufferedReaderオブジェクトのクローズ時の例外捕捉
+//			    	        e.printStackTrace();
+//			    	    }
 			    	}
 		    	}
 		    }
