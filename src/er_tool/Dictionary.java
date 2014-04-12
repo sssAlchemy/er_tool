@@ -25,6 +25,7 @@ public class Dictionary {
 	        BufferedReader br = new BufferedReader(new FileReader(csv));
 	        // 最終行まで読み込む
 	        String line = "";
+	        String str = null;
 	        while ((line = br.readLine()) != null) {
 	            // 1行をデータの要素に分割
 	        	String[] st = line.split(",", 0);
@@ -32,7 +33,13 @@ public class Dictionary {
 	        	if(st.length==1) {
 	        		word.put(index.get(word_count), "");
 	        	}else {
-	        		word.put(index.get(word_count), st[1].replaceAll("\"", "").toUpperCase());
+	        		str = st[1].replaceAll("\"", "");
+	        		Pattern pat = Pattern.compile(".+[A-Z]");
+	        		Matcher mat = pat.matcher(str);
+	        		if(mat.find()){
+	        			str = mat.replaceAll(str.substring(mat.start(),mat.end()-1)+"_"+str.substring(mat.end()-1,mat.end()));
+	        		}
+	        		word.put(index.get(word_count), str.toUpperCase());
 	        	}
 	        	word_count++;
 	        }
@@ -93,10 +100,9 @@ public class Dictionary {
 		String regex = null;
 		for(int i=0; i<keyArray.length; i++){
 			regex = index.get(i);
-			Pattern p = Pattern.compile(/*"HashMapのキー"*/regex);
+			Pattern p = Pattern.compile(regex);
 			Matcher m = p.matcher(ja);
-			ja = m.replaceAll(word.get(/*"HashMapのキー"*/regex)+"_");
-//			en = m.replaceAll(word.get(/*"HashMapのキー"*/regex)+"_");
+			ja = m.replaceAll(word.get(regex)+"_");
 		}
 		
 		Pattern q = Pattern.compile("__");
